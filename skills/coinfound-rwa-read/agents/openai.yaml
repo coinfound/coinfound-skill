@@ -1,0 +1,7 @@
+interface:
+  display_name: "CoinFound RWA Read"
+  short_description: "Read CoinFound RWA data across the shared catalog."
+  default_prompt: "Use $coinfound-rwa-read to fetch CoinFound RWA GET data from the shared endpoint catalog."
+
+policy:
+  allow_implicit_invocation: true
