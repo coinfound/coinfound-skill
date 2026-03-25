@@ -1,35 +1,35 @@
 # RWA Snapshot Policy
 
-## 目标
+## Goal
 
-让 `schema_snapshots` 作为 read skill 的第一数据源，减少每次实时探测开销。
+Treat `schema_snapshots` as the first schema source for the read skill so live probing stays exceptional.
 
-## 写入规则
+## Write Rules
 
-- 仅在以下情况写入或更新 snapshot：
-  - endpoint 首次探测成功
-  - 现有 snapshot 缺失关键字段
-  - 实时响应与现有 snapshot 明显冲突
-- 写入时保留：
+- Write or refresh a snapshot only when:
+  - an endpoint is successfully probed for the first time
+  - the existing snapshot is missing critical fields
+  - the live response clearly conflicts with the existing snapshot
+- Keep these fields in the stored snapshot:
   - `endpoint_key`
   - `shape_family`
   - `inferred_schema`
   - `sample_response`
   - `updated_at`
 
-## 质量门槛
+## Quality Bar
 
-- 至少通过两次独立请求得到一致 shape 才标记为稳定。
-- `empty_success` 需要单独记录，不可与 `data: null` 混淆。
-- 深层数组结构（如 `dataset` 下 `networks`）必须完整保留。
+- Mark a snapshot as stable only after at least two independent requests agree on the shape.
+- Record `empty_success` explicitly and do not merge it with `data: null`.
+- Preserve deep nested arrays such as `dataset[*].networks` without flattening.
 
-## 与 read skill 的衔接
+## Handoff To The Read Skill
 
-`$coinfound-rwa-read` 应优先消费快照，不应默认触发 probe。只有在缺失或冲突时才转交 probe。
+`$coinfound-rwa-read` should consume snapshots first and should not trigger probing by default. Hand off to probe only when data is missing or conflicting.
 
-## 共享数据提醒
+## Bundled Data Reminder
 
-优先查看以下目录：
+Read these directories first:
 
-- `../../shared/coinfound_rwa/data/endpoint_catalog.json`
-- `../../shared/coinfound_rwa/data/schema_snapshots/`
+- `shared/coinfound_rwa/data/endpoint_catalog.json`
+- `shared/coinfound_rwa/data/schema_snapshots/`

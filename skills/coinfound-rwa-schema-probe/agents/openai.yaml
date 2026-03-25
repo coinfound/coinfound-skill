@@ -1,7 +1,7 @@
 interface:
   display_name: "CoinFound RWA Schema Probe"
-  short_description: "Probe missing RWA schemas and refresh snapshots."
-  default_prompt: "Use $coinfound-rwa-schema-probe to infer missing CoinFound RWA endpoint schemas and refresh snapshots."
+  short_description: "Probe missing RWA schemas and refresh bundled snapshots."
+  default_prompt: "Use $coinfound-rwa-schema-probe to infer missing CoinFound RWA endpoint schemas and refresh the bundled snapshots."
 
 policy:
   allow_implicit_invocation: true

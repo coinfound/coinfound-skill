@@ -9,13 +9,13 @@ CoinFound RWA skill set for data access and schema probing.
 - `coinfound-rwa-schema-probe`
   - Probe endpoint schemas when documentation is incomplete
 
-## Installation
+## ClawHub Publishing
 
-After publishing this repository to GitHub, install skills from their skill directories:
+Each folder under `skills/` is a self-contained ClawHub publish target:
 
-```text
-$skill-installer install https://github.com/<your-org>/<your-repo>/tree/main/skills/coinfound-rwa-read
-$skill-installer install https://github.com/<your-org>/<your-repo>/tree/main/skills/coinfound-rwa-schema-probe
+```bash
+clawhub publish skills/coinfound-rwa-read
+clawhub publish skills/coinfound-rwa-schema-probe
 ```
 
 ## Quick Usage

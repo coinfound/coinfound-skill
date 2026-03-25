@@ -1,52 +1,59 @@
 ---
 name: coinfound-rwa-read
-description: Read-only CoinFound RWA data skill for third-party integrations. Supports GET endpoints across the CoinFound RWA catalog.
+description: Read-only CoinFound RWA data skill backed by a bundled endpoint catalog and schema snapshots.
+version: 0.1.0
+metadata:
+  openclaw:
+    requires:
+      anyBins:
+        - python3
+        - python
 ---
 
 # CoinFound RWA Read
 
-用于第三方只读获取 CoinFound 的 RWA 数据。该 skill 只处理 `GET` 数据接口。
+Self-contained read-only access to CoinFound RWA `GET` endpoints.
 
-## 使用边界
+## Scope
 
-- 支持：`v1/c/rwa/*` 下的 `aggregates`、`timeseries`、`pie`、`list`、`dataset`。
-- 不负责 schema 探测与快照刷新；此类任务交给 `$coinfound-rwa-schema-probe`。
+- Supports `aggregates`, `timeseries`, `pie`, `list`, and `dataset` routes under `v1/c/rwa/*`.
+- Does not refresh schema snapshots. Hand unresolved schema gaps to `$coinfound-rwa-schema-probe`.
 
-## 执行流程
+## Workflow
 
-1. 先读取共享目录中的接口与 schema 快照，再决定调用参数。
-2. 按 `asset_class + family + metric` 或 `endpoint_key` 解析路由。
-3. 通过共享脚本发起请求并归一化返回。
-4. 若接口结构缺失或冲突，转交 `$coinfound-rwa-schema-probe`。
+1. Read the bundled endpoint catalog and schema snapshots before constructing a request.
+2. Resolve the route by `endpoint_key` or by `asset_class + family + metric`.
+3. Run the bundled fetch script and return both the envelope and normalized payload.
+4. If the schema is missing or conflicts with live data, delegate to `$coinfound-rwa-schema-probe`.
 
-## 共享资源（优先顺序）
+## Bundled Resources
 
-优先读取：
+Read first:
 
-- `../../shared/coinfound_rwa/data/endpoint_catalog.json`
-- `../../shared/coinfound_rwa/data/schema_snapshots/`
+- `shared/coinfound_rwa/data/endpoint_catalog.json`
+- `shared/coinfound_rwa/data/schema_snapshots/`
 
-再使用：
+Run:
 
-- `../../shared/coinfound_rwa/scripts/fetch_rwa.py`
+- `shared/coinfound_rwa/scripts/fetch_rwa.py`
 
-## 最小调用示例
+## Minimal Examples
 
 ```bash
-python ../../shared/coinfound_rwa/scripts/fetch_rwa.py \
+python3 shared/coinfound_rwa/scripts/fetch_rwa.py \
   --endpoint-key stable-coin.market-cap.timeseries \
   --query '{"groupBy":"network"}'
 ```
 
 ```bash
-python ../../shared/coinfound_rwa/scripts/fetch_rwa.py \
+python3 shared/coinfound_rwa/scripts/fetch_rwa.py \
   --asset-class private-credit \
   --family aggregates
 ```
 
-## 结果约定
+## Expected Output
 
-默认输出应包含：
+Default output should include:
 
 - `request`
 - `response_envelope`
@@ -55,7 +62,7 @@ python ../../shared/coinfound_rwa/scripts/fetch_rwa.py \
 - `shape_family`
 - `schema_source`
 
-## 参考文档
+## References
 
 - `references/rwa-read-workflow.md`
 - `references/rwa-read-capabilities.md`

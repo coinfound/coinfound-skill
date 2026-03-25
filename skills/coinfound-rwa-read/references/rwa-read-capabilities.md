@@ -1,6 +1,6 @@
 # RWA Read Capabilities
 
-## 支持能力
+## Supported Operations
 
 - `get_rwa_aggregates`
 - `get_rwa_timeseries`
@@ -8,7 +8,7 @@
 - `get_rwa_list`
 - `get_rwa_dataset`
 
-## 支持的资产域
+## Supported Asset Classes
 
 - `private-credit`
 - `commodity`
@@ -21,9 +21,9 @@
 - `x-stock`
 - `platforms`
 
-## 共享数据优先级
+## Bundled Data Priority
 
-调用前优先查看：
+Inspect these files before making live requests:
 
-- `../../shared/coinfound_rwa/data/endpoint_catalog.json`
-- `../../shared/coinfound_rwa/data/schema_snapshots/`
+- `shared/coinfound_rwa/data/endpoint_catalog.json`
+- `shared/coinfound_rwa/data/schema_snapshots/`
